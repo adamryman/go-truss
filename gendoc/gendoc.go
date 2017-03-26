@@ -37,7 +37,7 @@ func GenerateDocs(dt deftree.Deftree) map[string]io.Reader {
 	md := dt.(*deftree.MicroserviceDefinition)
 	// Normalize the service to prevent diversion from convention
 	svcname := strings.ToLower(generator.CamelCase(findServiceName(md)))
-	files[svcname+"-service/docs/docs.md"] = strings.NewReader(response)
+	files[svcname+"/docs/docs.md"] = strings.NewReader(response)
 
 	return files
 }

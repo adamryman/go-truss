@@ -50,8 +50,8 @@ func TestNewData(t *testing.T) {
 	}
 
 	conf := Config{
-		GoPackage: "github.com/TuneLab/go-truss/gengokit/general-service",
-		PBPackage: "github.com/TuneLab/go-truss/gengokit/general-service",
+		GoPackage: "github.com/TuneLab/go-truss/gengokit/general",
+		PBPackage: "github.com/TuneLab/go-truss/gengokit/general",
 	}
 
 	te, err := NewData(sd, conf)

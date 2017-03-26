@@ -68,7 +68,7 @@ In your terminal, go to the folder containing echo.proto and run `truss *.proto`
 
 ```
 .
-├── echo-service
+├── echo
 │   ├── docs
 │   │   └── docs.md
 │   ├── generated
@@ -85,7 +85,7 @@ In your terminal, go to the folder containing echo.proto and run `truss *.proto`
 │   └── echo.pb.go
 ├── echo.proto
 ```
-From the top down, within echo-service/:
+From the top down, within echo/:
   - docs/ contains the generated documentation of the service API
   - generated/ contains the wiring and encoding protocols necessary for service communication
   - handlers/server/server_handler.go is populated with stubs where you will add the business logic
@@ -125,8 +125,8 @@ func (s echoService) Echo(ctx context.Context, in *pb.EchoRequest) (*pb.EchoResp
 ## Build/Run the client and server executables
 
 From the directory containing echo.proto run
-`go build echo-service/echo-cli-client/client_main.go` and
-`go build echo-service/echo-server/server_main.go`
+`go build echo/echo-cli-client/client_main.go` and
+`go build echo/echo-server/server_main.go`
 
 Create another terminal window to run the server in, navigate to the same directory and launch the server:
 `./server_main`
@@ -158,7 +158,7 @@ The following is left as an exersise to the reader:
     - now separate this logic into an unexported helper function
   - Define a new RPC call in echo.proto
     - regenerate service with truss, check that your old logic remains
-    - implement the logic for your new call in a separate package, place it ouside of echo-service
+    - implement the logic for your new call in a separate package, place it ouside of echo
     - wire in the new logic by importing the package in the server_handler.go
   Suggestion: Save everything the service hears and echo all of it back. See repeated types (protobuf), package variables and init() function (golang).
   - Remove an RPC call definition from echo.proto
@@ -173,7 +173,7 @@ The following is left as an exersise to the reader:
 
 You can control the location of the output folders for your service by specifying the following flags when running truss
 ```
-  -svcout {go-style-package-path to where you want the {Name}-service folder to be}
+  -svcout {go-style-package-path to where you want the {Name} folder to be}
   -pbout {go-style-package-path to where you want the *.pb.go interface definitions to be}
 ```
 
@@ -182,7 +182,7 @@ For example:
 ```
 truss -pbout truss-demo/interface-defs -svcout truss-demo/service echo.proto
 ```
-Executing this command will place the *.pb.go files into `$GOPATH/truss-demo/interface-defs/`, and the entire echo-service directory (excepting the *.pb.go files) to `$GOPATH/truss-demo/service/`.
+Executing this command will place the *.pb.go files into `$GOPATH/truss-demo/interface-defs/`, and the entire echo directory (excepting the *.pb.go files) to `$GOPATH/truss-demo/service/`.
 
 ## Middlewares
 

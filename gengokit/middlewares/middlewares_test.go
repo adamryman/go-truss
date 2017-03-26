@@ -23,7 +23,7 @@ func TestNewServiceMiddleware(t *testing.T) {
 		package middlewares
 
 		import (
-		pb "github.com/TuneLab/go-truss/gengokit/general-service"
+		pb "github.com/TuneLab/go-truss/gengokit/general"
 		)
 
 		func WrapService(in pb.ProtoServiceServer) pb.ProtoServiceServer {
@@ -58,7 +58,7 @@ func TestNewEndpointMiddleware(t *testing.T) {
 		package middlewares
 
 		import (
-			svc "github.com/TuneLab/go-truss/gengokit/general-service/generated"
+			svc "github.com/TuneLab/go-truss/gengokit/general/generated"
 		)
 
 		// WrapEndpoints accepts the service's entire collection of endpoints, so that a
@@ -104,7 +104,7 @@ func TestRenderPrevService(t *testing.T) {
 		package middlewares
 
 		import (
-			pb "github.com/TuneLab/go-truss/gengokit/general-service"
+			pb "github.com/TuneLab/go-truss/gengokit/general"
 		)
 
 		func WrapService(in pb.ProtoServiceServer) pb.ProtoServiceServer {
@@ -146,7 +146,7 @@ func TestRenderPrevEndpoints(t *testing.T) {
 
 		import (
 			"github.com/go-kit/kit/endpoint"
-			svc "github.com/TuneLab/go-truss/gengokit/general-service/generated"
+			svc "github.com/TuneLab/go-truss/gengokit/general/generated"
 		)
 
 		// WrapEndpoint will be called individually for all endpoints defined in
@@ -245,8 +245,8 @@ func generalService() (*svcdef.Svcdef, *gengokit.Data, error) {
 		return nil, nil, err
 	}
 	conf := gengokit.Config{
-		GoPackage: "github.com/TuneLab/go-truss/gengokit/general-service",
-		PBPackage: "github.com/TuneLab/go-truss/gengokit/general-service",
+		GoPackage: "github.com/TuneLab/go-truss/gengokit/general",
+		PBPackage: "github.com/TuneLab/go-truss/gengokit/general",
 	}
 
 	data, err := gengokit.NewData(sd, conf)

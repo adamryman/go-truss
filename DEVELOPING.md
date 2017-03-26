@@ -59,7 +59,7 @@ Truss works as follows:
 6. Generate documentation from comments with `gendocs`
 
 If there was already generated code in the filesystem then truss will not
-overwrite user code in the /NAME-service/handlers directory
+overwrite user code in the /NAME/handlers directory
 
 Additional internal packages of note used by these programs are:
 

@@ -30,9 +30,9 @@ func init() {
 
 func TestTemplatePathToActual(t *testing.T) {
 	pathToWants := map[string]string{
-		"NAME-service/":                "package-service/",
-		"NAME-service/test.gotemplate": "package-service/test.go",
-		"NAME-service/NAME-server":     "package-service/package-server",
+		"NAME/":                "package/",
+		"NAME/test.gotemplate": "package/test.go",
+		"NAME/NAME-server":     "package/package-server",
 	}
 
 	for path, want := range pathToWants {
@@ -79,7 +79,7 @@ func TestApplyTemplateFromPath(t *testing.T) {
 
 	conf := gengokit.Config{
 		GoPackage: "github.com/TuneLab/go-truss",
-		PBPackage: "github.com/TuneLab/go-truss/gengokit/general-service",
+		PBPackage: "github.com/TuneLab/go-truss/gengokit/general",
 	}
 
 	te, err := gengokit.NewData(sd, conf)
@@ -87,7 +87,7 @@ func TestApplyTemplateFromPath(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	end, err := applyTemplateFromPath("NAME-service/generated/endpoints.gotemplate", te)
+	end, err := applyTemplateFromPath("NAME/generated/endpoints.gotemplate", te)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -133,7 +133,7 @@ func stringToTemplateExector(def, importPath string) (*gengokit.Data, error) {
 
 func TestAllTemplates(t *testing.T) {
 	const goPackage = "github.com/TuneLab/go-truss/gengokit"
-	const goPBPackage = "github.com/TuneLab/go-truss/gengokit/general-service"
+	const goPBPackage = "github.com/TuneLab/go-truss/gengokit/general"
 
 	const def = `
 		syntax = "proto3";
@@ -214,7 +214,7 @@ func TestAllTemplates(t *testing.T) {
 
 	conf := gengokit.Config{
 		GoPackage: "github.com/TuneLab/go-truss/gengokit",
-		PBPackage: "github.com/TuneLab/go-truss/gengokit/general-service",
+		PBPackage: "github.com/TuneLab/go-truss/gengokit/general",
 	}
 
 	data1, err := gengokit.NewData(sd1, conf)

@@ -21,14 +21,14 @@ The current directory should look like this:
 ```
 
 Run truss on your service definition file: `truss svc.proto`.  
-Upon success, `NAME-service` folder will be created in your current directory. 
-(`NAME-service`, where NAME is the name of the package defined in your definition file.)
+Upon success, `NAME` folder will be created in your current directory. 
+(`NAME`, where NAME is the name of the package defined in your definition file.)
 
 Your directory structure will look like this:
 
 ```
 .
-├── NAME-service
+├── NAME
 │   ├── docs
 │   │   └── docs.md
 │   ├── generated
@@ -50,7 +50,7 @@ Now that you've generated your service, you can install the generated binaries
 with `go install ./...` which will install `NAME-cli-client` and `NAME-server`,
 where NAME is the name of the package defined in your definition file.
 
-To add business logic, edit the `server_handler.go` file in `./NAME-service/handlers/server/`.
+To add business logic, edit the `server_handler.go` file in `./NAME/handlers/server/`.
 
 To add middlewares, edit ... (TODO)
 
@@ -62,5 +62,5 @@ To add middlewares, edit ... (TODO)
 
  Truss will enforce that exported functions in `server_handler.go` conform to the rpc interface defined in the service *.proto files. All other exported functions will be removed upon next re-run of truss. 
 
-2. DO NOT create files or directories in `NAME-service/`
- All user logic must exist outside of `NAME-service/`, leaving organization of that logic up to the user.
+2. DO NOT create files or directories in `NAME/`
+ All user logic must exist outside of `NAME/`, leaving organization of that logic up to the user.

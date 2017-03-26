@@ -78,7 +78,7 @@ func TestBasicTypes(t *testing.T) {
 func TestBasicTypesWithPBOutFlag(t *testing.T) {
 	testEndToEnd("1-basic", "getbasic", t,
 		"--pbout",
-		"github.com/TuneLab/go-truss/cmd/_integration-tests/cli/test-service-definitions/1-basic/pbout")
+		"github.com/TuneLab/go-truss/cmd/_integration-tests/cli/test-definitions/1-basic/pbout")
 }
 
 func TestBasicTypesWithRelPBOutFlag(t *testing.T) {
@@ -244,8 +244,8 @@ func buildTestService(serviceDir string) (err error) {
 		return err
 	}
 
-	const serverPath = "/test-service/test-server"
-	const clientPath = "/test-service/test-cli-client"
+	const serverPath = "/test/test-server"
+	const clientPath = "/test/test-cli-client"
 
 	// Build server and client
 	errChan := make(chan error)
@@ -403,7 +403,7 @@ func cleanTests(servicesDir string) {
 // removeTestFiles removes all files created by running truss and building the
 // service from a single definition directory
 func removeTestFiles(defDir string) {
-	os.RemoveAll(filepath.Join(defDir, "test-service"))
+	os.RemoveAll(filepath.Join(defDir, "test"))
 	os.RemoveAll(filepath.Join(defDir, "bin"))
 	os.RemoveAll(filepath.Join(defDir, "pbout"))
 	os.MkdirAll(filepath.Join(defDir, "pbout"), 0777)

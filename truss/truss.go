@@ -11,7 +11,7 @@ import (
 type NamedReadWriter interface {
 	io.ReadWriter
 	// Name() is a path relative to the directory containing the .proto
-	// files.  Name() should start with "NAME-service/" for all files which have
+	// files.  Name() should start with "NAME/" for all files which have
 	// been generated and read in. Note that os.file fulfills the
 	// NamedReadWriter interface.
 	Name() string

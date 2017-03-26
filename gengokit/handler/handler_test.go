@@ -122,8 +122,8 @@ func TestApplyServerTempl(t *testing.T) {
 		}
 	`
 	conf := gengokit.Config{
-		GoPackage: "github.com/TuneLab/go-truss/gengokit/general-service",
-		PBPackage: "github.com/TuneLab/go-truss/gengokit/general-service",
+		GoPackage: "github.com/TuneLab/go-truss/gengokit/general",
+		PBPackage: "github.com/TuneLab/go-truss/gengokit/general",
 	}
 	sd, err := svcdef.NewFromString(def, gopath)
 	if err != nil {
@@ -139,7 +139,7 @@ func TestApplyServerTempl(t *testing.T) {
 		import (
 			"golang.org/x/net/context"
 
-			pb "github.com/TuneLab/go-truss/gengokit/general-service"
+			pb "github.com/TuneLab/go-truss/gengokit/general"
 		)
 
 		// NewService returns a naïve, stateless implementation of Service.
@@ -309,7 +309,7 @@ func TestPruneDecls(t *testing.T) {
 		import (
 			"golang.org/x/net/context"
 
-			pb "github.com/TuneLab/go-truss/gengokit/general-service"
+			pb "github.com/TuneLab/go-truss/gengokit/general"
 		)
 
 		// NewService returns a naïve, stateless implementation of Service.
@@ -443,7 +443,7 @@ func TestUpdateMethods(t *testing.T) {
 
 	conf := gengokit.Config{
 		GoPackage: "github.com/TuneLab/go-truss/gengokit",
-		PBPackage: "github.com/TuneLab/go-truss/gengokit/general-service",
+		PBPackage: "github.com/TuneLab/go-truss/gengokit/general",
 	}
 
 	te, err := gengokit.NewData(sd, conf)

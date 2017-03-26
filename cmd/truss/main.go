@@ -133,7 +133,7 @@ func parseInput() (*truss.Config, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "cannot parse service name from the provided definition files")
 	}
-	svcFolderName := svcName + "-service"
+	svcFolderName := svcName
 
 	if *svcPackageFlag == "" {
 		svcPath := filepath.Join(filepath.Dir(cfg.DefPaths[0]), svcFolderName)
@@ -300,11 +300,11 @@ func combineFiles(group ...map[string]io.Reader) map[string]io.Reader {
 
 // writeGenFile writes a file at relPath relative to serviceDir to the filesystem
 func writeGenFile(file io.Reader, relPath, serviceDir string) error {
-	// the serviceDir contains /NAME-service so we want to write to the
+	// the serviceDir contains /NAME so we want to write to the
 	// directory above
 	outDir := filepath.Dir(serviceDir)
 
-	// i.e. NAME-service/generated/endpoint.go
+	// i.e. NAME/generated/endpoint.go
 
 	fullPath := filepath.Join(outDir, relPath)
 	err := os.MkdirAll(filepath.Dir(fullPath), 0777)

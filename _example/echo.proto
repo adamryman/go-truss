@@ -5,7 +5,7 @@
 syntax = "proto3";
 
 // The package name determines the name of the directories that truss creates
-// for `package echo;` truss will create the directory "echo-service".
+// for `package echo;` truss will create the directory "echo".
 package echo;
 
 import "github.com/TuneLab/go-truss/deftree/googlethirdparty/annotations.proto";
@@ -32,6 +32,7 @@ service Echo {
 
 message EchoRequest {
   string In = 1;
+  bool test = 2;
 }
 
 message LouderRequest {
@@ -39,6 +40,7 @@ message LouderRequest {
   string In = 1;
   // Loudness is the number of exclamations marks to add to the echoed string
   int32 Loudness = 2;
+
 }
 
 message EchoResponse {
