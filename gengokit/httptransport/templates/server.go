@@ -9,26 +9,37 @@ var ServerDecodeTemplate = `
 	// body. Primarily useful in a server.
 	func DecodeHTTP{{$binding.Label}}Request(_ context.Context, r *http.Request) (interface{}, error) {
 		var req pb.{{GoName $binding.Parent.RequestType}}
-		err := json.NewDecoder(r.Body).Decode(&req)
-		// err = io.EOF if r.Body was empty
-		if err != nil && err != io.EOF {
-			return nil, errors.Wrap(err, "decoding body of http request")
+		buf, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			return nil, errors.Wrapf(err, "cannot read body of http request")
+		}
+		if len(buf) > 0 {
+			if err = json.Unmarshal(buf, &req); err != nil {
+				const size = 8196
+				if len(buf) > size {
+					buf = buf[:size]
+				}
+				return nil, httpError{fmt.Errorf("request body '%s': cannot parse non-json request body", buf),
+					http.StatusBadRequest,
+					nil,
+				}
+			}
 		}
 
 		pathParams, err := PathParams(r.URL.Path, "{{$binding.PathTemplate}}")
 		_ = pathParams
 		if err != nil {
-			return nil, errors.Wrap(err, "couldn't unmarshal path parameters")
+			return nil, errors.Wrap(err, "cannot unmarshal path parameters")
 		}
 
 		queryParams := r.URL.Query()
 		_ = queryParams
 
-	{{range $field := $binding.Fields}}
-		{{if ne $field.Location "body"}}
-			{{$field.GenQueryUnmarshaler}}
+		{{range $field := $binding.Fields}}
+			{{if ne $field.Location "body"}}
+				{{$field.GenQueryUnmarshaler}}
+			{{end}}
 		{{end}}
-	{{end}}
 		return &req, err
 	}
 {{- end -}}
@@ -54,7 +65,7 @@ func PathParams(url string, urlTmpl string) (map[string]string, error) {
 	expectedLen := len(strings.Split(strings.TrimRight(urlTmpl, "/"), "/"))
 	recievedLen := len(strings.Split(strings.TrimRight(url, "/"), "/"))
 	if expectedLen != recievedLen {
-		return nil, fmt.Errorf("Expected a path containing %d parts, provided path contains %d parts", expectedLen, recievedLen)
+		return nil, fmt.Errorf("expecting a path containing %d parts, provided path contains %d parts", expectedLen, recievedLen)
 	}
 
 	parts := strings.Split(url, "/")
@@ -143,6 +154,8 @@ import (
 	pb "{{.PBImportPath -}}"
 )
 
+const contentType = "application/json; charset=utf-8"
+
 var (
 	_ = fmt.Sprint
 	_ = bytes.Compare
@@ -161,6 +174,7 @@ func MakeHTTPHandler(ctx context.Context, endpoints Endpoints, logger log.Logger
 		serverOptions := []httptransport.ServerOption{
 			httptransport.ServerBefore(headersToContext),
 			httptransport.ServerErrorEncoder(errorEncoder),
+			httptransport.ServerAfter(httptransport.SetContentType(contentType)),
 		}
 	{{- end }}
 	m := http.NewServeMux()
@@ -179,16 +193,52 @@ func MakeHTTPHandler(ctx context.Context, endpoints Endpoints, logger log.Logger
 	return m
 }
 
+// ErrorEncoder writes the error to the ResponseWriter, by default a content
+// type of application/json, a body of json with key "error" and the value
+// error.Error(), and a status code of 500. If the error implements Headerer,
+// the provided headers will be applied to the response. If the error
+// implements json.Marshaler, and the marshaling succeeds, the JSON encoded
+// form of the error will be used. If the error implements StatusCoder, the
+// provided StatusCode will be used instead of 500.
 func errorEncoder(_ context.Context, err error, w http.ResponseWriter) {
+	body, _ := json.Marshal(errorWrapper{Error: err.Error()})
+	if marshaler, ok := err.(json.Marshaler); ok {
+		if jsonBody, marshalErr := marshaler.MarshalJSON(); marshalErr == nil {
+			body = jsonBody
+		}
+	}
+	w.Header().Set("Content-Type", contentType)
+	if headerer, ok := err.(httptransport.Headerer); ok {
+		for k := range headerer.Headers() {
+			w.Header().Set(k, headerer.Headers().Get(k))
+		}
+	}
 	code := http.StatusInternalServerError
-	msg := err.Error()
-
+	if sc, ok := err.(httptransport.StatusCoder); ok {
+		code = sc.StatusCode()
+	}
 	w.WriteHeader(code)
-	json.NewEncoder(w).Encode(errorWrapper{Error: msg})
+	w.Write(body)
 }
 
 type errorWrapper struct {
-	Error string ` + "`json:\"error\"`\n" + `
+	Error string ` + "`" + `json:"error"` + "`" + `
+}
+
+// httpError satisfies the Headerer and StatusCoder interfaces in
+// package github.com/go-kit/kit/transport/http.
+type httpError struct {
+	error
+	statusCode int
+	headers    map[string][]string
+}
+
+func (h httpError) StatusCode() int {
+	return h.statusCode
+}
+
+func (h httpError) Headers() http.Header {
+	return h.headers
 }
 
 // Server Decode
