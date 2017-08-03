@@ -1,13 +1,13 @@
 package handlers
 
 import (
-	"golang.org/x/net/context"
+	"context"
 
 	pb "github.com/TuneLab/truss/cmd/_integration-tests/middlewares/middlewarestest-service"
 )
 
 // NewService returns a naïve, stateless implementation of Service.
-func NewService() pb.MiddlewaresTestServer {
+func NewService() pb.MiddlewaresTestService {
 	return middlewarestestService{}
 }
 

@@ -13,7 +13,7 @@ var middlewareEndpoints svc.Endpoints
 
 func TestMain(m *testing.M) {
 
-	var service pb.MiddlewaresTestServer
+	var service pb.MiddlewaresTestService
 	{
 		service = handlers.NewService()
 	}

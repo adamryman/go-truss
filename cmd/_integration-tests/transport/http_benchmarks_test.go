@@ -14,7 +14,7 @@ import (
 	"time"
 
 	// 3d Party
-	"golang.org/x/net/context"
+	"context"
 
 	pb "github.com/TuneLab/truss/cmd/_integration-tests/transport/transportpermutations-service"
 	httpclient "github.com/TuneLab/truss/cmd/_integration-tests/transport/transportpermutations-service/svc/client/http"
@@ -60,7 +60,7 @@ func BenchmarkGetWithQueryClient_NoNetwork(b *testing.B) {
 	// Create the server for http transport, but without actually having it
 	// serve HTTP requests. Instead we're going to pass it a pre-constructed
 	// HTTP request directly.
-	var service pb.TransportPermutationsServer
+	var service pb.TransportPermutationsService
 	{
 		service = handlers.NewService()
 		// Wrap Service with middlewares. See handlers/service_middlewares.go
@@ -74,7 +74,6 @@ func BenchmarkGetWithQueryClient_NoNetwork(b *testing.B) {
 	ctx = context.WithValue(ctx, "transport", "HTTPJSON")
 	server := httptransport.NewServer(
 		// This is definitely a hack
-		ctx,
 		endpoints.GetWithQueryEndpoint,
 		svc.DecodeHTTPGetWithQueryZeroRequest,
 		svc.EncodeHTTPGenericResponse,

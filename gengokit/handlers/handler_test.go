@@ -137,13 +137,13 @@ func TestApplyServerTempl(t *testing.T) {
 		package handlers
 
 		import (
-			"golang.org/x/net/context"
+			"context"
 
 			pb "github.com/TuneLab/truss/gengokit/general-service"
 		)
 
 		// NewService returns a naïve, stateless implementation of Service.
-		func NewService() pb.ProtoServer {
+		func NewService() pb.ProtoService {
 			return protoService{}
 		}
 
@@ -307,13 +307,13 @@ func TestPruneDecls(t *testing.T) {
 		package handlers
 
 		import (
-			"golang.org/x/net/context"
+			"context"
 
 			pb "github.com/TuneLab/truss/gengokit/general-service"
 		)
 
 		// NewService returns a naïve, stateless implementation of Service.
-		func NewService() pb.ProtoServer {
+		func NewService() pb.ProtoService {
 			return protoService{}
 		}
 

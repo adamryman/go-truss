@@ -18,7 +18,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	var service pb.TransportPermutationsServer
+	var service pb.TransportPermutationsService
 	{
 		service = handler.NewService()
 	}

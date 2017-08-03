@@ -7,13 +7,13 @@ import (
 	"github.com/pkg/errors"
 	"net/http"
 
-	"golang.org/x/net/context"
+	"context"
 
 	pb "github.com/TuneLab/truss/cmd/_integration-tests/transport/transportpermutations-service"
 )
 
 // NewService returns a naïve, stateless implementation of Service.
-func NewService() pb.TransportPermutationsServer {
+func NewService() pb.TransportPermutationsService {
 	return transportpermutationsService{}
 }
 
