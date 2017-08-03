@@ -21,13 +21,22 @@ const Handlers = `
 package handlers
 
 import (
-	"golang.org/x/net/context"
+	"context"
 
 	pb "{{.PBImportPath -}}"
 )
 
 // NewService returns a naïve, stateless implementation of Service.
-func NewService() pb.{{GoName .Service.Name}}Server {
+{{- /*
+
+// TODO: Once golang 1.9 and type aliases come out:
+// Update:
+// pb.{{.Service.Name}}Service
+// back to:
+// pb.{{.Service.Name}}Server
+
+*/}}
+func NewService() pb.{{GoName .Service.Name}}Service {
 	return {{ToLower .Service.Name}}Service{}
 }
 

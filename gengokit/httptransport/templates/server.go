@@ -67,7 +67,7 @@ import (
 	"strings"
 	"io"
 
-	"golang.org/x/net/context"
+	"context"
 
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
@@ -105,7 +105,6 @@ func MakeHTTPHandler(ctx context.Context, endpoints Endpoints) http.Handler {
 	{{range $method := .HTTPHelper.Methods}}
 		{{range $binding := $method.Bindings}}
 			m.Methods("{{$binding.Verb | ToUpper}}").Path("{{$binding.PathTemplate}}").Handler(httptransport.NewServer(
-				ctx,
 				endpoints.{{$method.Name}}Endpoint,
 				DecodeHTTP{{$binding.Label}}Request,
 				EncodeHTTPGenericResponse,

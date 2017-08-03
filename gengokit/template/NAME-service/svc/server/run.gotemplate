@@ -30,7 +30,16 @@ type Config struct {
 
 func NewEndpoints() svc.Endpoints {
 	// Business domain.
-	var service pb.{{GoName .Service.Name}}Server
+	{{- /*
+
+	// TODO: Once golang 1.9 and type aliases come out:
+	// Update:
+	// pb.{{.Service.Name}}Service
+	// back to:
+	// pb.{{.Service.Name}}Server
+
+	*/}}
+	var service pb.{{.Service.Name}}Service
 	{
 		service = handlers.NewService()
 		// Wrap Service with middlewares. See handlers/middlewares.go

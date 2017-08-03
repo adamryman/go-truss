@@ -4,8 +4,8 @@ const Middlewares = `
 package handlers
 
 import (
-	pb "{{.PBImportPath -}}"
 	"{{.ImportPath -}} /svc"
+	pb "{{.PBImportPath -}}"
 )
 
 // WrapEndpoints accepts the service's entire collection of endpoints, so that a
@@ -34,7 +34,16 @@ func WrapEndpoints(in svc.Endpoints) svc.Endpoints {
 	return in
 }
 
-func WrapService(in pb.{{.Service.Name}}Server) pb.{{.Service.Name}}Server {
+{{- /*
+
+// TODO: Once golang 1.9 and type aliases come out:
+// Update:
+// pb.{{.Service.Name}}Service
+// back to:
+// pb.{{.Service.Name}}Server
+
+*/}}
+func WrapService(in pb.{{.Service.Name}}Service) pb.{{.Service.Name}}Service {
 	return in
 }
 `

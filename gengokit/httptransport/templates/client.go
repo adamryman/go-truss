@@ -88,11 +88,11 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"context"
 
 	"github.com/go-kit/kit/endpoint"
 	httptransport "github.com/go-kit/kit/transport/http"
 	"github.com/pkg/errors"
-	"golang.org/x/net/context"
 
 	// This Service
 	"{{.ImportPath -}} /svc"
@@ -110,7 +110,16 @@ var (
 // New returns a service backed by an HTTP server living at the remote
 // instance. We expect instance to come from a service discovery system, so
 // likely of the form "host:port".
-func New(instance string, options ...ClientOption) (pb.{{GoName .Service.Name}}Server, error) {
+{{- /*
+
+// TODO: Once golang 1.9 and type aliases come out:
+// Update:
+// pb.{{.Service.Name}}Service
+// back to:
+// pb.{{.Service.Name}}Server
+
+*/}}
+func New(instance string, options ...ClientOption) (pb.{{.Service.Name}}Service, error) {
 	var cc clientConfig
 
 	for _, f := range options {

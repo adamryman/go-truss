@@ -12,7 +12,7 @@ package svc
 
 import (
 	"fmt"
-	"golang.org/x/net/context"
+	"context"
 
 	"github.com/go-kit/kit/endpoint"
 
@@ -52,7 +52,16 @@ type Endpoints struct {
 // Make Endpoints
 {{with $te := .}}
 	{{range $i := $te.Service.Methods}}
-		func Make{{$i.Name}}Endpoint(s pb.{{$te.Service.Name}}Server) endpoint.Endpoint {
+		{{- /*
+
+		// TODO: Once golang 1.9 and type aliases come out:
+		// Update:
+		// pb.{{.Service.Name}}Service
+		// back to:
+		// pb.{{.Service.Name}}Server
+
+		*/}}
+		func Make{{$i.Name}}Endpoint(s pb.{{$te.Service.Name}}Service) endpoint.Endpoint {
 			return func(ctx context.Context, request interface{}) (response interface{}, err error) {
 				req := request.(*pb.{{GoName $i.RequestType.Name}})
 				v, err := s.{{$i.Name}}(ctx, req)

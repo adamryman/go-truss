@@ -104,6 +104,24 @@ func main() {
 	dt, sd, err := parseServiceDefinition(cfg)
 	exitIfError(errors.Wrap(err, "cannot parse input definition proto files"))
 
+	// TODO: Once golang 1.9 and type aliases come out:
+	// Remove below as it will not be needed
+	conf := ggkconf.Config{
+		PBPackage:     cfg.PBPackage,
+		GoPackage:     cfg.ServicePackage,
+		PreviousFiles: cfg.PrevGen,
+		Version:       Version,
+		VersionDate:   VersionDate,
+	}
+	svcInterface, err := gengokit.GenerateServiceInterface(sd, conf)
+	exitIfError(errors.Wrap(err, "cannot generate service interface"))
+
+	err = writeGenFile(svcInterface, "interface.go", cfg.PBPath)
+	if err != nil {
+		exitIfError(errors.Wrap(err, "cannot to write output"))
+	}
+	// END TODO above
+
 	genFiles, err := generateCode(cfg, dt, sd)
 	exitIfError(errors.Wrap(err, "cannot generate service"))
 

@@ -98,7 +98,16 @@ func submain() int {
 	flag.Parse()
 
 	var (
-		service pb.{{GoName .Service.Name}}Server
+		{{- /*
+
+		// TODO: Once golang 1.9 and type aliases come out:
+		// Update:
+		// pb.{{.Service.Name}}Service
+		// back to:
+		// pb.{{.Service.Name}}Server
+
+		*/}}
+		service pb.{{.Service.Name}}Service
 		err     error
 	)
 
