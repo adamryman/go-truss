@@ -190,6 +190,9 @@ func headersToContext(ctx context.Context, r *http.Request) context.Context {
 		ctx = context.WithValue(ctx, strings.ToLower(k), r.Header.Get(k))
 	}
 
+	// also add the request url
+	r.Header.Set("request-url", r.URL.Path)
+
 	return ctx
 }
 `
